@@ -280,7 +280,7 @@ function SelectRow(CurrentRow, RowIndex) {
             var maxRate = $("#<%=txtmaxRate.ClientID %>").val() == "" ? 0 : $("#<%=txtmaxRate.ClientID %>").val();
             var HSNNumber = $("#<%=txtHsnNumber.ClientID %>").val() == "" ? 0 : $("#<%=txtHsnNumber.ClientID %>").val();
             var Opening_Value = $("#<%=txtOpening_Value.ClientID %>").val() == "" ? 0 : $("#<%=txtOpening_Value.ClientID %>").val();
-
+            var Unit = $("#<%=drpUnit.ClientID %>").val();
             var MarkaSet = $("#<%=drpMarketSet.ClientID %>").val();
             if (MarkaSet == " " || MarkaSet == "&nbsp;") {
                 MarkaSet = "";
@@ -326,7 +326,7 @@ function SelectRow(CurrentRow, RowIndex) {
                 "System_Rate='" + System_Rate + "' Purchase_AC='" + Purchase_AC + "' Sale_AC='" + Sale_AC + "' Vat_AC='" + Vat_AC + "' Opening_Bal='" + Opening_Bal + "' " +
                 "KgPerKatta='" + KgPerKatta + "' minRate='" + minRate + "' maxRate='" + maxRate + "' Company_Code='" + Company_Code + "' Year_Code='" + Year_Code + "' Branch_Code='0' " + insertrecord + " " +
                 "HSN='" + HSNNumber + "' systemid='" + systemid + "' Opening_Value='" + Opening_Value + "' Gst_Code='" + Gst_Code + "' MarkaSet='" + MarkaSet + "' Supercost='" + Supercost + "' " +
-                "Packing='" + Packing + "' LodingGst='" + LodingGst + "' MarkaPerc='" + MarkaPerc + "' SuperPerc='" + SuperPerc + "' RatePer='" + RatePer + "' IsService='" + IsService + "'/></ROOT>";
+                "Packing='" + Packing + "' LodingGst='" + LodingGst + "' MarkaPerc='" + MarkaPerc + "' SuperPerc='" + SuperPerc + "' RatePer='" + RatePer + "' IsService='" + IsService + "' Unit='"+ Unit +"' /></ROOT>";
             $.ajax({
                 type: "POST",
                 url: "../xmlExecuteDMLQry.asmx/ExecuteXMLQry",
@@ -394,7 +394,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 ValidationGroup="save" OnClick="btnAdd_Click" Height="24px" />
                             &nbsp;
                             <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="btnHelp" Width="90px"
-                                TabIndex="19" ValidationGroup="add" OnClick="btnSave_Click" Height="24px" />
+                                TabIndex="26" ValidationGroup="add" OnClick="btnSave_Click" Height="24px" />
                             &nbsp;
                             <asp:Button ID="btnEdit" runat="server" Text="Edit" CssClass="btnHelp" Width="90px"
                                 ValidationGroup="save" OnClick="btnEdit_Click" Height="24px" />
@@ -403,10 +403,10 @@ function SelectRow(CurrentRow, RowIndex) {
                                 ValidationGroup="add" OnClick="btnDelete_Click" OnClientClick="Confirm()" Height="24px" />
                             &nbsp;
                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btnHelp" Width="90px"
-                                TabIndex="19" ValidationGroup="save" OnClick="btnCancel_Click" Height="24px" />
+                                TabIndex="27" ValidationGroup="save" OnClick="btnCancel_Click" Height="24px" />
                             &nbsp;
                         <asp:Button ID="btnBack" runat="server" Text="Back" CssClass="btnHelp" Width="90px"
-                            ValidationGroup="save" Height="24px" TabIndex="20" OnClientClick="systemmaster()" />
+                            ValidationGroup="save" Height="24px" TabIndex="28" OnClientClick="systemmaster()" />
                         </td>
 
                     </tr>
@@ -535,13 +535,23 @@ function SelectRow(CurrentRow, RowIndex) {
                                     <ajax1:FilteredTextBoxExtender ID="FilteredtxtHsnNumber" runat="server" FilterType="Numbers,Custom"
                                         ValidChars="." TargetControlID="txtHsnNumber">
                                     </ajax1:FilteredTextBoxExtender>
+                                    
+                                &emsp; &emsp;     Unit:
+                                    <asp:DropDownList ID="drpUnit" runat="server" CssClass="ddl" Width="200px" TabIndex="13"
+                                        Height="25px" AutoPostBack="true" OnTextChanged="drpUnit_TextChanged">
+                                        <asp:ListItem Text="Quintal" Value="Q"></asp:ListItem>
+                                        <asp:ListItem Text="Pieces" Value="P"></asp:ListItem> 
+                                        <asp:ListItem Text="Number" Value="N"></asp:ListItem> 
+                                        <asp:ListItem Text="KGS" Value="K"></asp:ListItem> 
+                                    </asp:DropDownList>
+                                
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">Opening Value :
                                 </td>
                                 <td align="left">
-                                    <asp:TextBox ID="txtOpening_Value" runat="server" CssClass="txt" Width="150px" TabIndex="12"
+                                    <asp:TextBox ID="txtOpening_Value" runat="server" CssClass="txt" Width="150px" TabIndex="14"
                                         Height="24px"></asp:TextBox>
                                     <ajax1:FilteredTextBoxExtender ID="FilteredtxtOpening_Value" runat="server" FilterType="Numbers,Custom"
                                         ValidChars="." TargetControlID="txtOpening_Value">
@@ -553,7 +563,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 </td>
                                 <td align="left">
                                     <asp:TextBox ID="txtgst_Code" runat="server" CssClass="txt" Width="80px" onkeydown="gstcode(event);" AutoPostBack="false"
-                                        OnTextChanged="txtgst_Code_TextChanged" TabIndex="13" Height="24px"></asp:TextBox>
+                                        OnTextChanged="txtgst_Code_TextChanged" TabIndex="15" Height="24px"></asp:TextBox>
                                     <asp:Button ID="btntxtgst_code" runat="server" CssClass="btnHelp" Text="..." OnClick="btntxtgst_code_Click"
                                         Height="24px" Width="20px" />
                                     <asp:Label ID="lblgstcode" runat="server" CssClass="lblName"></asp:Label>
@@ -563,7 +573,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <td align="right" style="width: 30%;">Market Sales:
                                 </td>
                                 <td align="left" style="width: 50%;">
-                                    <asp:DropDownList ID="drpMarketSet" runat="server" CssClass="ddl" Width="180px" TabIndex="14"
+                                    <asp:DropDownList ID="drpMarketSet" runat="server" CssClass="ddl" Width="180px" TabIndex="16"
                                         Height="25px">
                                         <asp:ListItem Text="YES" Value="Y"></asp:ListItem>
                                         <asp:ListItem Text="NO" Value="N" Selected="True"></asp:ListItem>
@@ -572,7 +582,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                     </asp:DropDownList>
                                     &emsp;
                                      <asp:TextBox ID="txtMarketSale_Perc" runat="server" CssClass="txt" Width="80px" AutoPostBack="false"
-                                         TabIndex="15" Height="24px"></asp:TextBox>
+                                         TabIndex="17" Height="24px"></asp:TextBox>
                                     &nbsp;<b>%</b>
                                 </td>
                             </tr>
@@ -580,7 +590,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <td align="right" style="width: 30%;">Suparcost:
                                 </td>
                                 <td align="left" style="width: 50%;">
-                                    <asp:DropDownList ID="drpsupercost" runat="server" CssClass="ddl" Width="180px" TabIndex="15"
+                                    <asp:DropDownList ID="drpsupercost" runat="server" CssClass="ddl" Width="180px" TabIndex="18"
                                         Height="25px">
 
                                         <asp:ListItem Text="YES" Value="Y"></asp:ListItem>
@@ -589,7 +599,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                     </asp:DropDownList>
                                     &emsp;
                                     <asp:TextBox ID="txtSupercost_Perc" runat="server" CssClass="txt" Width="80px" AutoPostBack="false"
-                                        TabIndex="16" Height="24px"></asp:TextBox>
+                                        TabIndex="19" Height="24px"></asp:TextBox>
                                     &nbsp;<b>%</b>
                                 </td>
                             </tr>
@@ -597,7 +607,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <td align="right" style="width: 30%;">Packing:
                                 </td>
                                 <td align="left" style="width: 50%;">
-                                    <asp:DropDownList ID="drpPacking" runat="server" CssClass="ddl" Width="180px" TabIndex="15"
+                                    <asp:DropDownList ID="drpPacking" runat="server" CssClass="ddl" Width="180px" TabIndex="20"
                                         Height="25px">
 
                                         <asp:ListItem Text="YES" Value="Y"></asp:ListItem>
@@ -610,7 +620,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <td align="right" style="width: 30%;">Including GST:
                                 </td>
                                 <td align="left" style="width: 50%;">
-                                    <asp:DropDownList ID="drpLodingGst" runat="server" CssClass="ddl" Width="180px" TabIndex="16"
+                                    <asp:DropDownList ID="drpLodingGst" runat="server" CssClass="ddl" Width="180px" TabIndex="21"
                                         Height="25px">
 
                                         <asp:ListItem Text="YES" Value="Y"></asp:ListItem>
@@ -623,7 +633,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <td align="right" style="width: 30%;">Rate Per:
                                 </td>
                                 <td align="left" style="width: 50%;">
-                                    <asp:DropDownList ID="drpRatePer" runat="server" CssClass="ddl" Width="180px" TabIndex="17"
+                                    <asp:DropDownList ID="drpRatePer" runat="server" CssClass="ddl" Width="180px" TabIndex="22"
                                         Height="25px">
 
                                         <asp:ListItem Text="Quantity" Value="Q" Selected="True"></asp:ListItem>
@@ -636,7 +646,7 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <td align="right" style="width: 30%;">Is Service:
                                 </td>
                                 <td align="left" style="width: 50%;">
-                                    <asp:DropDownList ID="drpIsService" runat="server" CssClass="ddl" Width="180px" TabIndex="18"
+                                    <asp:DropDownList ID="drpIsService" runat="server" CssClass="ddl" Width="180px" TabIndex="23"
                                         Height="25px">
                                         <asp:ListItem Text="YES" Value="Y"></asp:ListItem>
                                         <asp:ListItem Text="NO" Value="N" Selected="True"></asp:ListItem>
@@ -647,7 +657,7 @@ function SelectRow(CurrentRow, RowIndex) {
                             <tr>
 
                                 <td align="left">
-                                    <asp:TextBox ID="txtSysRate" runat="Server" CssClass="txt" TabIndex="4" Width="102px"
+                                    <asp:TextBox ID="txtSysRate" runat="Server" CssClass="txt" TabIndex="24" Width="102px"
                                         AutoPostBack="true" Style="text-align: right;" OnTextChanged="txtSysRate_TextChanged"
                                         Height="24px" Visible="false"></asp:TextBox>
                                     <ajax1:FilteredTextBoxExtender ID="filterrate" runat="server" FilterType="Numbers,Custom"
@@ -659,7 +669,7 @@ function SelectRow(CurrentRow, RowIndex) {
 
                                 <td align="left">
                                     <asp:TextBox ID="txtvatAC" runat="server" CssClass="txt" Width="80px" AutoPostBack="false" Visible="false"
-                                        OnTextChanged="txtvatAC_TextChanged" TabIndex="7" Height="24px" onkeydown="vatamount(event);"></asp:TextBox>
+                                        OnTextChanged="txtvatAC_TextChanged" TabIndex="25" Height="24px" onkeydown="vatamount(event);"></asp:TextBox>
                                     <asp:Button ID="btntxtvatAC" runat="server" CssClass="btnHelp" Text="..." OnClick="btntxtvatAC_Click"
                                         Height="24px" Width="20px" Visible="false" />
                                     <asp:Label ID="lblVatACName" runat="server" CssClass="lblName"></asp:Label>

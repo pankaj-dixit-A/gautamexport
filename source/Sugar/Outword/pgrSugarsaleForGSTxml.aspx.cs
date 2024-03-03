@@ -117,7 +117,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                         lblGSTRateName.Text = gstname;
                         setFocusControl(txtAC_CODE);
                         // PurcSaleDo_CoomonFields purc = new PurcSaleDo_CoomonFields();
-                     
+
                     }
                     #region oldcode comment
                     //pnlPopup.Style["display"] = "none";
@@ -270,6 +270,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                 pnlgrdDetail.Enabled = false;
                 btntxtUnitcode.Enabled = false;
                 btnPrintSaleBill.Enabled = true;
+                btnOtherPrintSaleBill.Enabled = true;
                 lblUnitName.Text = "";
                 lblchkEWayBill.Text = "";
                 chkEWayBill.Enabled = false;
@@ -338,12 +339,14 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                 grdDetail.DataBind();
                 pnlgrdDetail.Enabled = true;
                 btnPrintSaleBill.Enabled = false;
+                btnOtherPrintSaleBill.Enabled = false;
                 btntxtUnitcode.Enabled = true;
                 lblUnitName.Text = "";
                 lblchkEWayBill.Text = string.Empty;
                 chkEWayBill.Enabled = true;
                 chkEWayBill.Checked = false;
                 lblchkEWayBill.Text = "";
+                lblBill_To.Text = "";
 
 
                 txtITEM_CODE.Enabled = true;
@@ -391,6 +394,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
 
                 pnlgrdDetail.Enabled = false;
                 btnPrintSaleBill.Enabled = true;
+                btnOtherPrintSaleBill.Enabled = true;
                 btntxtUnitcode.Enabled = false;
                 #region logic
                 btntxtAC_CODE.Enabled = false;
@@ -444,6 +448,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
 
                 pnlgrdDetail.Enabled = true;
                 btnPrintSaleBill.Enabled = false;
+                btnOtherPrintSaleBill.Enabled = false;
                 btntxtUnitcode.Enabled = true;
                 chkEWayBill.Enabled = true;
                 //if (lblDONo.Text != "0")
@@ -524,7 +529,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
         #region enable disable previous next buttons
         int RecordCount = 0;
         string query = "";
-        query = "select count(*) from " + tblHead + " where company_code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and Year_Code=" + Convert.ToInt32(Session["year"].ToString()) ;
+        query = "select count(*) from " + tblHead + " where company_code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and Year_Code=" + Convert.ToInt32(Session["year"].ToString());
         DataSet ds = new DataSet();
         DataTable dt = new DataTable();
         ds = clsDAL.SimpleQuery(query);
@@ -586,7 +591,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                 }
                 ds = new DataSet();
                 dt = new DataTable();
-                query = "SELECT top 1 [doc_no] from " + tblHead + " where saleid<" + Convert.ToInt32(hdnf.Value) + " and company_code=" + Convert.ToInt32(Session["Company_Code"].ToString()) 
+                query = "SELECT top 1 [doc_no] from " + tblHead + " where saleid<" + Convert.ToInt32(hdnf.Value) + " and company_code=" + Convert.ToInt32(Session["Company_Code"].ToString())
                     + " and Year_Code=" + Convert.ToInt32(Session["year"].ToString()) + "  ORDER BY doc_no asc  ";
                 ds = clsDAL.SimpleQuery(query);
                 if (ds != null)
@@ -1361,15 +1366,13 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
     protected void btnClosedetails_Click(object sender, EventArgs e)
     {
         txtITEM_CODE.Text = string.Empty;
-        btntxtITEM_CODE.Text = string.Empty;
         txtQUANTAL.Text = string.Empty;
         txtPACKING.Text = string.Empty;
         txtBAGS.Text = string.Empty;
         txtRATE.Text = string.Empty;
         txtITEMAMOUNT.Text = string.Empty;
         txtITEM_NARRATION.Text = string.Empty;
-        btnAdddetails.Text = string.Empty;
-        btnClosedetails.Text = string.Empty;
+        LBLITEMNAME.Text = string.Empty;
         btnAdddetails.Text = "ADD";
 
         setFocusControl(txtITEM_CODE);
@@ -1392,6 +1395,26 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
         txtBAGS.Text = Server.HtmlDecode(gvrow.Cells[10].Text);
         txtRATE.Text = Server.HtmlDecode(gvrow.Cells[11].Text);
         txtITEMAMOUNT.Text = Server.HtmlDecode(gvrow.Cells[12].Text);
+        string Unit = clsCommon.getString("select unit from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
+        hdnfUnit.Value = Unit;
+
+        if (Unit == "N")
+        {
+            lblUnit.Text = "Number";
+        }
+        else if (Unit == "P")
+        {
+            lblUnit.Text = "Pieces";
+        }
+
+        else if (Unit == "K")
+        {
+            lblUnit.Text = "KGS";
+        }
+        else
+        {
+            lblUnit.Text = "Quintal";
+        }
     }
     #endregion
 
@@ -2220,7 +2243,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
             if (hdnfClosePopup.Value == "txtITEM_CODE")
             {
                 lblPopupHead.Text = "--Select Item--";
-                string qry = "select System_Code,System_Name_E as Item_Name from " + SystemMasterTable + " where System_Type='I' and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString());
+                string qry = "select System_Code,System_Name_E as Item_Name,Unit from " + SystemMasterTable + " where System_Type='I' and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString());
                 this.showPopup(qry);
             }
             if (hdnfClosePopup.Value == "txtGSTRateCode")
@@ -2846,8 +2869,26 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                     else
                     {
                         itemname = clsCommon.getString("select System_Name_E from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
+                        string Unit = clsCommon.getString("select unit from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
+                        hdnfUnit.Value = Unit;
                         if (itemname != string.Empty && itemname != "0")
                         {
+                            if (Unit == "N")
+                            {
+                                lblUnit.Text = "Number";
+                            }
+                            else if (Unit == "P")
+                            {
+                                lblUnit.Text = "Pieces";
+                            }
+                            else if (Unit == "K")
+                            {
+                                lblUnit.Text = "KGS";
+                            }
+                            else
+                            {
+                                lblUnit.Text = "Quintal";
+                            }
                             LBLITEMNAME.Text = itemname;
                             setFocusControl(txtBrand_Code);
                         }
@@ -2940,6 +2981,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
             double RCST = Convert.ToDouble("0" + txtCGSTAmount.Text);
             double RIGST = Convert.ToDouble("0" + txtIGSTAmount.Text);
             double RSGST = Convert.ToDouble("0" + txtSGSTAmount.Text);
+
             double Roundoffamnt = txtRoundOff.Text != string.Empty ? Convert.ToDouble(txtRoundOff.Text) : 0.00;
             if (qtl != 0 && packing != 0)
             {
@@ -2951,7 +2993,28 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                 txtBAGS.Text = bags.ToString();
             }
 
-            item_Amount = Math.Round((qtl * rate), 2);
+            if (hdnfUnit.Value == "P" || hdnfUnit.Value == "N")
+            {
+                bags = Convert.ToInt32((qtl / packing));
+                txtBAGS.Text = bags.ToString();
+            }
+            else if (hdnfUnit.Value == "K")
+            {
+                item_Amount = Math.Round((qtl * rate), 2);
+            }
+            else
+            {
+                txtBAGS.Text = bags.ToString();
+            }
+
+            if (hdnfUnit.Value == "Q")
+            {
+                item_Amount = Math.Round((qtl * rate), 2);
+            }
+            else if (hdnfUnit.Value == "P" || hdnfUnit.Value == "N")
+            {
+                item_Amount = Math.Round((qtl * rate), 2);
+            }
             txtITEMAMOUNT.Text = item_Amount.ToString();
 
             #region calculate subtotal
@@ -3607,7 +3670,7 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
             "' and Company_Code='" + Session["Company_code"].ToString() + "'");
         string corporate = "0";
 
-        if (corporatenumber !="0" && corporatenumber != string.Empty)
+        if (corporatenumber != "0" && corporatenumber != string.Empty)
         {
             if (sellingtype == "P")
             {
@@ -3652,6 +3715,59 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
                "','" + billto + "','" + do_no + "','" + corporatenumber
                + "','" + corporate + "')", true);
         }
+        //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ky", "javascript:SB('" + saleid + "','"
+        //    + billto + "','"+do_no+"')", true);
+    }
+
+    protected void btnOtherPrintSaleBill_Click(object sender, EventArgs e)
+    {
+        string billto = clsCommon.getString("select isnull(carporate_ac,0) as id from qrydohead where doc_no='"
+            + lblDONo.Text + "' and  Company_Code='" + Session["Company_code"].ToString() + "' " +
+                " and Year_Code='" + Session["year"].ToString() + "'");
+
+        string corporatenumber = clsCommon.getString("select Carporate_Sale_No as id from qrydohead where doc_no='"
+            + lblDONo.Text + "' and  Company_Code='" + Session["Company_code"].ToString() + "' " +
+                " and Year_Code='" + Session["year"].ToString() + "'");
+        string sellingtype = clsCommon.getString("select selling_type from carporatehead where doc_no='" + lblDONo.Text +
+            "' and Company_Code='" + Session["Company_code"].ToString() + "'");
+        string corporate = "0";
+
+        if (corporatenumber != "0" && corporatenumber != string.Empty)
+        {
+            if (sellingtype == "P")
+            {
+                string DeliveryType = clsCommon.getString("select DeliveryType from carporatehead where doc_no='" + corporatenumber +
+               "' and Company_Code='" + Session["Company_code"].ToString() + "'");
+                if (DeliveryType == "C")
+                {
+                    corporate = "0";
+                }
+                else
+                {
+                    corporate = "1";
+                }
+
+            }
+            else
+            {
+                corporate = "1";
+            }
+        }
+        else
+        {
+            corporate = "0";
+        }
+
+
+
+
+
+        string saleid = lblSale_Id.Text;
+        string do_no = lblDONo.Text;
+        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ky", "javascript:SBOther('" + saleid +
+                "','" + billto + "','" + do_no + "','" + corporatenumber
+                + "','" + corporate + "')", true);
+
         //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ky", "javascript:SB('" + saleid + "','"
         //    + billto + "','"+do_no+"')", true);
     }
@@ -3993,31 +4109,31 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
         ////double balancelimit = Convert.ToDouble(Session["BalanceLimit"]);
         double Amt2 = 0.00;
         double sbamt2 = 0.00;
-       
-        
-            //PSTDS
+
+
+        //PSTDS
         if (panno != string.Empty)
+        {
+            if (dtpan.Rows.Count > 0)
             {
-                if (dtpan.Rows.Count > 0)
+                for (int i = 0; i < dtpan.Rows.Count; i++)
                 {
-                    for (int i = 0; i < dtpan.Rows.Count; i++)
-                    {
-                        double Amt1 = 0.00;
-                        //int accode = 0;
-                        // accode=dtpan.Rows
-                        //psamt1 = Convert.ToDouble(clsCommon.getString("select sum(AMOUNT) as AMOUNT from NT_1_GLEDGER where  AC_CODE=" + dtpan.Rows[0]["Ac_Code"].ToString()
-                        // + " and DRCR='C' and  TRAN_TYPE in('PS','PR','RP') and YEAR_CODE='" + Convert.ToInt32(Session["year"].ToString()) +
-                        // "' and COMPANY_CODE=" + Convert.ToInt32(Session["Company_Code"].ToString())));
-                        Amt1 = Convert.ToDouble(clsCommon.getString("select sum(isnull(AMOUNT,0)) as AMOUNT from NT_1_GLEDGER where AC_CODE=" + dtpan.Rows[i]["Ac_Code"].ToString()
-                        + " and DRCR='D' and TRAN_TYPE in('SB','LV','CV','RR','RS','RB','CB''GI') and YEAR_CODE='" + Convert.ToInt32(Session["year"].ToString()) +
-                         "' and COMPANY_CODE=" + Convert.ToInt32(Session["Company_Code"].ToString())));
-                        Amt2 += Amt1;
-                    }
-       
-                    Amt = Amt2.ToString();
+                    double Amt1 = 0.00;
+                    //int accode = 0;
+                    // accode=dtpan.Rows
+                    //psamt1 = Convert.ToDouble(clsCommon.getString("select sum(AMOUNT) as AMOUNT from NT_1_GLEDGER where  AC_CODE=" + dtpan.Rows[0]["Ac_Code"].ToString()
+                    // + " and DRCR='C' and  TRAN_TYPE in('PS','PR','RP') and YEAR_CODE='" + Convert.ToInt32(Session["year"].ToString()) +
+                    // "' and COMPANY_CODE=" + Convert.ToInt32(Session["Company_Code"].ToString())));
+                    Amt1 = Convert.ToDouble(clsCommon.getString("select sum(isnull(AMOUNT,0)) as AMOUNT from NT_1_GLEDGER where AC_CODE=" + dtpan.Rows[i]["Ac_Code"].ToString()
+                    + " and DRCR='D' and TRAN_TYPE in('SB','LV','CV','RR','RS','RB','CB''GI') and YEAR_CODE='" + Convert.ToInt32(Session["year"].ToString()) +
+                     "' and COMPANY_CODE=" + Convert.ToInt32(Session["Company_Code"].ToString())));
+                    Amt2 += Amt1;
                 }
-                 #endregion
+
+                Amt = Amt2.ToString();
             }
+        #endregion
+        }
         if (Amt == string.Empty || Amt == "")
         {
             Amt = "0.00";
@@ -4103,5 +4219,5 @@ public partial class Sugar_pgrSugarsaleForGSTxml : System.Web.UI.Page
 
     }
 
-    
+
 }
