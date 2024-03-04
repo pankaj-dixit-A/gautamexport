@@ -799,6 +799,7 @@ function SelectRow(CurrentRow, RowIndex) {
             <asp:HiddenField ID="hdnfpurchaseid" runat="server" />
             <asp:HiddenField ID="hdnfyearcode" runat="server" />
             <asp:HiddenField ID="hdnfcompanycode" runat="server" />
+            <asp:HiddenField ID="hdnfUnit" runat="server" />
             <asp:Panel ID="pnlMain" runat="server" Font-Names="verdana" Font-Bold="true" ForeColor="Black"
                 Font-Size="Small" Style="margin-left: 30px; margin-top: 0px; z-index: 100;">
                 <table width="80%" align="left">
@@ -1019,6 +1020,8 @@ function SelectRow(CurrentRow, RowIndex) {
                                 <asp:Button ID="btntxtBrand_Code" runat="server" CssClass="btnHelp" OnClick="btntxtBrand_Code_Click"
                                     Text="..." />
                                 <asp:Label ID="lblBrandname" runat="server" CssClass="lblName"></asp:Label>
+                                 Unit:
+                                <asp:Label ID="lblUnit" runat="server" CssClass="lblName"></asp:Label>
                                 Quantal:
                                 <asp:TextBox ID="txtQUANTAL" runat="Server" CssClass="txt" TabIndex="15" Width="80px"
                                     Height="24px" Style="text-align: right;" AutoPostBack="true" OnTextChanged="txtQUANTAL_TextChanged"></asp:TextBox>

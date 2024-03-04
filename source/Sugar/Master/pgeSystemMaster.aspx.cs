@@ -355,6 +355,7 @@ public partial class Sugar_pgeSystemMaster : System.Web.UI.Page
             txtMarketSale_Perc.Enabled = false;
             txtSupercost_Perc.Enabled = false;
             btntxtgst_code.Enabled = false;
+            drpUnit.Enabled = false;
             #endregion
         }
         if (dAction == "A")
@@ -377,6 +378,8 @@ public partial class Sugar_pgeSystemMaster : System.Web.UI.Page
             txtvatAC.Enabled = true;
             txtOpeningBal.Enabled = true;
             txtOpening_Value.Enabled = true;
+            drpUnit.Enabled = true;
+            drpUnit.SelectedValue = "Q";
             #region logic
             if (drpSystype.SelectedValue == "I")
             {
@@ -511,6 +514,7 @@ public partial class Sugar_pgeSystemMaster : System.Web.UI.Page
                 btntxtgst_code.Enabled = true;
                 txtminRate.Enabled = true;
                 txtmaxRate.Enabled = true;
+                drpUnit.Enabled = true;
             
                
             }
@@ -1078,6 +1082,7 @@ public partial class Sugar_pgeSystemMaster : System.Web.UI.Page
                             txtMarketSale_Perc.Text = dt.Rows[0]["MarkaPerc"].ToString();
                             txtSupercost_Perc.Text = dt.Rows[0]["SuperPerc"].ToString();
                             drpIsService.SelectedValue = dt.Rows[0]["IsService"].ToString().Trim();
+                            drpUnit.SelectedValue = dt.Rows[0]["Unit"].ToString();
 
                             Label lblCreated = (Label)Master.FindControl("MasterlblCreatedBy");
                             Label lblModified = (Label)Master.FindControl("MasterlblModifiedBy");
@@ -1433,6 +1438,13 @@ public partial class Sugar_pgeSystemMaster : System.Web.UI.Page
         //    btntxtSaleAC.Enabled = false;
         //    btntxtvatAC.Enabled = false;
         //}
+
+
+    }
+
+
+    protected void drpUnit_TextChanged(object sender, EventArgs e)
+    { 
 
 
     }

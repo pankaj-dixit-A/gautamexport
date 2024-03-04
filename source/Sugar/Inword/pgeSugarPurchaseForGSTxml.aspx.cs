@@ -364,7 +364,7 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
                 txtPACKING.Text = "50";
                 txtDUE_DAYS.Text = "1";
                 #endregion
-
+                 
                 txtITEM_CODE.Enabled = true;
                 btntxtITEM_CODE.Enabled = true;
                 txtQUANTAL.Enabled = true;
@@ -1213,6 +1213,26 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
         txtBAGS.Text = Server.HtmlDecode(gvrow.Cells[10].Text);
         txtRATE.Text = Server.HtmlDecode(gvrow.Cells[11].Text);
         txtITEMAMOUNT.Text = Server.HtmlDecode(gvrow.Cells[12].Text);
+        string Unit = clsCommon.getString("select unit from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
+        hdnfUnit.Value = Unit;
+
+        if (Unit == "N")
+        {
+            lblUnit.Text = "Number";
+        }
+        else if (Unit == "P")
+        {
+            lblUnit.Text = "Pieces";
+        }
+
+        else if (Unit == "K")
+        {
+            lblUnit.Text = "KGS";
+        }
+        else
+        {
+            lblUnit.Text = "Quintal";
+        }
     }
     #endregion
 
@@ -2602,6 +2622,8 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
                     {
                         itepacking = clsCommon.getString("select KgPerKatta from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
                         itemname = clsCommon.getString("select System_Name_E from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
+                        string Units = clsCommon.getString("select unit from " + SystemMasterTable + " where System_Code=" + txtITEM_CODE.Text + "  and Company_Code=" + Convert.ToInt32(Session["Company_Code"].ToString()) + " and System_Type='I'");
+                        hdnfUnit.Value = Units;
                         if (itemname != string.Empty || itepacking != string.Empty)
                         {
 
@@ -2612,6 +2634,24 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
                             else
                             {
                                 txtPACKING.Text = itepacking;
+                            }
+
+                            if (Units == "N")
+                            {
+                                lblUnit.Text = "Number";
+                            }
+                            else if (Units == "P")
+                            {
+                                lblUnit.Text = "Pieces";
+                            }
+
+                            else if (Units == "K")
+                            {
+                                lblUnit.Text = "KGS";
+                            }
+                            else
+                            {
+                                lblUnit.Text = "Quintal";
                             }
                             LBLITEMNAME.Text = itemname;
                             setFocusControl(txtBrand_Code);
@@ -2699,9 +2739,34 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
             double RIGST = Convert.ToDouble(txtIGSTAmount.Text != string.Empty ? txtIGSTAmount.Text : "0");
             double RSGST = Convert.ToDouble(txtSGSTAmount.Text != string.Empty ? txtSGSTAmount.Text : "0");
 
+        
+            if (hdnfUnit.Value == "Q")
+            {
+                item_Amount = Math.Round((qtl * rate), 2);
+            }
+
+            else if (hdnfUnit.Value == "K")
+            {
+                item_Amount = Math.Round((qtl * rate), 2);
+            }
+            else if (hdnfUnit.Value == "P" || hdnfUnit.Value == "N")
+            {
+                item_Amount = Math.Round((qtl * rate), 2);
+            }
+
             if (qtl != 0 && packing != 0)
             {
                 bags = Convert.ToInt32((qtl / packing) * 100);
+                txtBAGS.Text = bags.ToString();
+            }
+            else
+            {
+                txtBAGS.Text = bags.ToString();
+            }
+
+            if (hdnfUnit.Value == "P" || hdnfUnit.Value == "N")
+            {
+                bags = Convert.ToInt32((qtl / packing));
                 txtBAGS.Text = bags.ToString();
             }
             else

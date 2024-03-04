@@ -131,6 +131,10 @@
             var Action = 1;
             window.open('../Outword/pgrSugarsaleForGSTxml.aspx?saleid=' + DO + '&Action=' + Action, "_self");
         }
+        function SBOther(saleid, billto, docnumber, corporatenumber, corporate) { 
+            window.open('../Report/rptOtherSaleBillPrint.aspx?doc_no=' + saleid + '&billto=' + billto + '&docnumber=' + docnumber
+              + '&corporatenumber=' + corporatenumber + '&corporate=' + corporate);;
+        }
     </script>
     <script type="text/javascript">
         function Confirm() {
@@ -1173,6 +1177,7 @@
             <asp:HiddenField ID="hdnfcompanycode" runat="server" />
             <asp:HiddenField ID="hdnfSaleTDS" runat="server" />
             <asp:HiddenField ID="hdnfTCSRate" runat="server" />
+            <asp:HiddenField ID="hdnfUnit" runat="server" />
             <asp:Panel ID="pnlMain" runat="server" Font-Names="verdana" Font-Bold="true" ForeColor="Black"
                 Font-Size="Small" Style="margin-left: 30px; margin-top: 0px; z-index: 100;">
                 <table width="90%" align="left">
@@ -1197,6 +1202,9 @@
                                 ValidationGroup="save" Height="24px" OnClientClick="Back();" />
                             <asp:Button runat="server" ID="btnPrintSaleBill" Text="Print" CssClass="btnHelp"
                                 OnClick="btnPrintSaleBill_Click" Width="80px" Height="24px" OnClientClick="Confirm1()" />
+
+                             <asp:Button runat="server" ID="btnOtherPrintSaleBill" Text="Other Print" CssClass="btnHelp"
+                                OnClick="btnOtherPrintSaleBill_Click" Width="80px" Height="24px"  />
                             &nbsp;&nbsp;
                             <asp:Button runat="server" ID="btnGenEinvoice" Text="Generate EInvoice" CssClass="btnHelp"
                                 Width="120px" Height="24px" OnClientClick="EInovice();" />
@@ -1407,6 +1415,8 @@
                                 <asp:Button ID="btntxtBrand_Code" runat="server" CssClass="btnHelp" OnClick="btntxtBrand_Code_Click"
                                     Text="..." />
                                 <asp:Label ID="lblBrandname" runat="server" CssClass="lblName"></asp:Label>
+                                Unit:
+                                <asp:Label ID="lblUnit" runat="server" CssClass="lblName"></asp:Label>
                                 Quantal:
                                 <asp:TextBox ID="txtQUANTAL" runat="Server" CssClass="txt" TabIndex="14" Width="80px"
                                     Height="24px" Style="text-align: right;" AutoPostBack="True" OnTextChanged="txtQUANTAL_TextChanged"></asp:TextBox>
