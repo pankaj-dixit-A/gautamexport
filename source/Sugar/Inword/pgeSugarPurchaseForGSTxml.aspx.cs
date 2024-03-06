@@ -796,7 +796,7 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
 
                         #region  Details
                         qry = "select detail_id as ID,item_code,itemname as item_Name,Brand_Code,Brand_Name,narration,Quantal,packing,bags,rate,item_Amount,purchasedetailid," +
-                            " '' as rowAction,'' as SrNo,ic from " + qryDetail + " where purchaseid=" + hdnf.Value + " ";
+                            " '' as rowAction,'' as SrNo,ic, purchaseAc,purchaseaccoId from " + qryDetail + " where purchaseid=" + hdnf.Value + " ";
                         ds = clsDAL.SimpleQuery(qry);
                         if (ds != null)
                         {
@@ -1424,6 +1424,8 @@ public partial class Sugar_pgeSugarPurchaseForGSTxml : System.Web.UI.Page
             e.Row.Cells[14].ControlStyle.Width = new Unit("20px");
             e.Row.Cells[15].ControlStyle.Width = new Unit("60px");
             e.Row.Cells[16].ControlStyle.Width = new Unit("60px");
+            e.Row.Cells[17].ControlStyle.Width = new Unit("80px");
+            e.Row.Cells[18].ControlStyle.Width = new Unit("100px");
             int i = 1;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
